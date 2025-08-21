@@ -1,0 +1,24 @@
+# Fichiers système / éditeurs
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Dépendances (au cas où tu ajoutes du code plus tard)
+node_modules/
+vendor/
+
+# Fichiers temporaires
+*.log
+*.tmp
+*.swp
+
+# Sauvegardes
+*.bak
+*.old
+
+# Environnements virtuels (Python, si jamais tu ajoutes du code)
+.venv/
+env/
+__pycache__/
+*.pyc
