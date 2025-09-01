@@ -1,0 +1,119 @@
+openapi: 3.0.0
+info:
+  title: Orders API
+  version: 1.0.0
+  description: API avec authentification Basic et tags
+paths:
+  /products:
+    get:
+      tags:
+        - Products
+      summary: Liste des produits
+      responses:
+        '200':
+          description: Liste des produits
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+  /orders:
+    get:
+      tags:
+        - Orders
+      summary: Liste paginée des commandes
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/size'
+      responses:
+        '200':
+          description: Liste de commandes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+              example:
+                - identifier: 1
+                  customer_name: Alice
+                  creation_datetime: 2025-09-01T12:00:00Z
+                  total_amount: 50.5
+                - identifier: 2
+                  customer_name: Bob
+                  creation_datetime: 2025-09-01T12:30:00Z
+                  total_amount: 30.0
+    post:
+      tags:
+        - Orders
+      summary: Crée une commande
+      security:
+        - basicAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+            example:
+              customer_name: Charlie
+              creation_datetime: 2025-09-01T13:00:00Z
+              total_amount: 75.0
+      responses:
+        '201':
+          description: Commande créée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+              example:
+                identifier: 3
+                customer_name: Charlie
+                creation_datetime: 2025-09-01T13:00:00Z
+                total_amount: 75.0
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        name:
+          type: string
+        expiration_datetime:
+          type: string
+          format: date-time
+        price:
+          type: number
+          format: float
+    Order:
+      type: object
+      properties:
+        identifier:
+          type: integer
+        customer_name:
+          type: string
+        creation_datetime:
+          type: string
+          format: date-time
+        total_amount:
+          type: number
+          format: float
+  parameters:
+    page:
+      name: page
+      in: query
+      schema:
+        type: integer
+      required: false
+      example: 1
+    size:
+      name: size
+      in: query
+      schema:
+        type: integer
+      required: false
+      example: 20
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
